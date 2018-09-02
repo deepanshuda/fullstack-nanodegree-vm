@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 <head>
     <meta charset="UTF-8">
-    <title>Items</title>
+    <title>Home</title>
 </head>
 <body>
+<header class="header-container">
+    <nav></nav>
+</header>
+
+<div class="item-list-container">
+    <div>
+        <h3>Categories</h3>
+
+        {% for category in categories %}
+
+        <br>
+        <p><a href="{{url_for('categoryItemsList', categoryTitle=category.title)}}">{{category.title}}</a></p>
+
+        {% endfor %}
+    </div>
+    <div>
+
+        {% for item in items %}
+
+        <br>
+        <p><a href="{{url_for('categoryItem', category_id=item.categoryId, item_id=item.id)}}">{{item.title}}</a></p>
+
+        {% endfor %}
+    </div>
+</div>
 
 </body>
 </html>
