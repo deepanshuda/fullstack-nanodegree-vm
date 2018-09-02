@@ -38,12 +38,13 @@ def categoryItem(category_id, item_id):
 @app.route('/catalog/add', methods=['GET', 'POST'])
 def addNewItem():
     if request.method == 'POST':
-        newItem = Item(title = request.form['title'], description = request.form['desc'], categoryId = 1)
+        newItem = Item(title = request.form['title'], description = request.form['desc'], categoryId = request.form['categoryId'])
         session.add(newItem)
         session.commit()
         return redirect(url_for('categoriesList'))
     else:
-        return render_template('addItem.html')
+        categories = session.query(Category).all()
+        return render_template('addItem.html', categories = categories)
 
 
 @app.route('/catalog/<int:item_id>/edit', methods=['GET', 'POST'])
@@ -52,11 +53,13 @@ def editItem(item_id):
     if request.method == 'POST':
         item.title = request.form['title']
         item.description = request.form['desc']
+        item.categoryId = request.form['categoryId']
         session.add(item)
         session.commit()
         return redirect(url_for('categoryItem', category_id = item.categoryId, item_id = item.id))
     else:
-        return render_template('editItem.html', item = item)
+        categories = session.query(Category).all()
+        return render_template('editItem.html', item = item, categories = categories)
 
 
 @app.route('/catalog/<int:item_id>/delete', methods=['GET', 'POST'])

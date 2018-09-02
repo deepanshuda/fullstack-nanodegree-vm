@@ -8,5 +8,41 @@
 <header class="header-container">
     <nav></nav>
 </header>
+
+<div>
+    <form action="{{ url_for('editItem', item_id=item.id) }}" method="post">
+
+        <h3>Edit Item</h3>
+
+        <div>
+            <label>Title
+                <input type="text" name="title" value="{{ item.title }}">
+            </label>
+        </div>
+
+        <div>
+            <label>Description
+                <input type="text" name="desc" value="{{ item.description }}">
+            </label>
+        </div>
+
+        <div>
+            <label>Category
+                <select name="categoryId">
+                    {% for category in categories %}
+                    <option value="{{category.id}}">{{category.title}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+
+        <div>
+            <input type="submit" value="Update">
+        </div>
+
+
+    </form>
+</div>
+
 </body>
 </html>

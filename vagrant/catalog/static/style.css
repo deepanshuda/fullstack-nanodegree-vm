@@ -30,3 +30,11 @@ body {
     width: 100%;
     height: 50px;
 }
+
+.add-item-container > *{
+    display: inline-block;
+}
+
+.add-item-container > a {
+    float: right;
+}
