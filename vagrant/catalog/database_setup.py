@@ -12,6 +12,7 @@ class User(Base):
     id = Column(Integer, primary_key = True)
     first_name = Column(String(100), nullable = False)
     last_name = Column(String(100))
+    username = Column(String(100), nullable = False)
     hash_password = Column(String(250), nullable = False)
 
     @property
@@ -20,6 +21,7 @@ class User(Base):
             'id': self.id,
             'firstName': self.first_name,
             'lastName': self.last_name,
+            'username': self.username,
             'hashPassword': self.hash_password
         }
 

@@ -7,7 +7,23 @@
 </head>
 <body>
 <header class="header-container">
-    <nav></nav>
+    <nav>
+
+
+        {% if session['logged_in'] == true %}
+            <div>
+                <button type="button" onclick="window.location.href='{{ url_for('userLogout') }}'">Logout</button>
+            </div>
+        {% else %}
+            <div>
+                <button type="button" onclick="window.location.href='{{ url_for('userLogin') }}'">Login</button>
+                <div>
+                    <span>Not a Registered User?</span>
+                    <button type="button" onclick="window.location.href='{{ url_for('userSignup') }}'">Signup</button>
+                </div>
+            </div>
+        {% endif %}
+    </nav>
 </header>
 
 <div class="home-container">
@@ -24,13 +40,18 @@
     <div>
         <div class="add-item-container">
             <h3>Latest Items</h3>
-            <a href="{{url_for('addNewItem')}}">Add Item</a>
+
+            {% if session['logged_in'] == true %}
+                <a href="{{url_for('addNewItem')}}">Add Item</a>
+            {% endif %}
+
         </div>
 
         {% for item in items %}
 
         <br>
-        <p><a href="{{url_for('categoryItem', category_id=item.categoryId, item_id=item.id)}}">{{item.title}} ({{item.category.title}})</a></p>
+        <p><a href="{{url_for('categoryItem', category_id=item.categoryId, item_id=item.id)}}">{{item.title}}
+            ({{item.category.title}})</a></p>
 
         {% endfor %}
     </div>

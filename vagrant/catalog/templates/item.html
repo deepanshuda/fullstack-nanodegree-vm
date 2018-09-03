@@ -12,10 +12,13 @@
 <div class="item-container">
     <div>{{ item.title }}</div>
     <div>Description: {{item.description}}</div>
-    <div>
-        <a href="{{url_for('editItem', item_id=item.id)}}">Edit</a>
-        <a href="{{url_for('deleteItem', item_id=item.id)}}">Delete</a>
-    </div>
+
+    {% if session['logged_in'] == true %}
+        <div>
+            <a href="{{url_for('editItem', item_id=item.id)}}">Edit</a>
+            <a href="{{url_for('deleteItem', item_id=item.id)}}">Delete</a>
+        </div>
+    {% endif %}
 </div>
 
 </body>
