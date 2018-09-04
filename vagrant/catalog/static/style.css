@@ -4,35 +4,48 @@ body {
     margin: 0px;
     font-family: sans-serif;
 }
+a {
+    text-decoration: none;
+    color: #1c5d75;
+}
+a:visited {
+    color: #1c5d75;
+}
 .heading-title {
     font-size: 25px;
 }
 .home-container, .item-list-container, .item-container {
     margin: 8px 200px;
     padding: 8px;
+    background-color: #59bfe6;
 }
-.home-container > div {
+.home-container > div, .item-list-container > div {
     display: inline-block;
     width: 25%;
     padding: 0px 30px;
+    vertical-align: top;
 }
-.home-container > div:first-child {
+.home-container > div:first-child, .item-list-container > div:first-child {
     width: 15%;
-    border-right: 2px solid #cecece;
+    border-right: 2px solid #1c5d75;
+}
+.home-container > div:last-child, .item-list-container > div:last-child {
+    width: 74%;
 }
 
 .item-list-container {
 
 }
-.item-list-container > div {
 
-    display: inline-block;
-    width: 30%;
-
-}
 
 .item-container {
 
+}
+.item-container > .action-button {
+    margin-top: 50px;
+}
+.item-heading {
+    margin-bottom: 10px;
 }
 
 .header-container {
@@ -41,8 +54,10 @@ body {
     height: 50px;
 }
 .header-container > nav {
-    text-align: right;
     padding: 10px 200px;
+}
+.header-container > nav > * {
+    display: inline-block;
 }
 .header-container > nav > div {
     height: 100%;
@@ -50,22 +65,41 @@ body {
 .header-container > nav > div > * {
     display: inline-block;
 }
-.header-container > nav > div > button {
-    background-color: #aeae;
+.button-home {
+    background-color: transparent;
+    color: #fff;
+    border: 0px;
     width: 70px;
     /* line-height: 0.1; */
     height: 30px;
+    font-size: 17px;
 }
 
+.add-item-container {
+    width: 100%;
+    display: flex;
+    margin: auto;
+}
 .add-item-container > *{
     display: inline-block;
 }
-
 .add-item-container > a {
     float: right;
 }
+.button-add-item, .button-edit-item, .button-delete-item {
+    border: none;
+    background-color: transparent;
+    font-size: 17px;
+    color: #1c5d75;
+}
+.button-add-item {
+    margin: auto 0 auto auto;
+}
+.button-edit-item {
+    border-right: 2px solid #1c5d75;
+}
 
-.login-container {
+.login-container, .signup-container, .add-container, .edit-container {
     width: 30%;
     display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
     display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
@@ -77,26 +111,30 @@ body {
     align-items: center;
     background-color: #7E57C2;
 }
-.login-container > form {
+.login-container > form, .signup-container > form, .add-container > form, .edit-container > form {
     text-align: center;
     width: 80%
 }
-.login-container > form > * {
+.add-container > form, .edit-container > form {
+    text-align: left;
+}
+.login-container > form > *, .signup-container > form > *, .add-container > form > *, .edit-container > form > * {
     width: 100%;
     margin-bottom: 1rem;
 }
-.login-container > form .login-input {
+.login-input, .form-input {
     font-size: 1.2rem;
     line-height: 0.8;
     border: none;
     border-radius: 0.4rem;
-    padding: 0.8rem 1rem;
+    padding: 0rem 1rem;
+    height: 40px;
 }
-.login-container > form .login-input:focus {
+.login-input:focus, .form-input:focus {
   outline: none;
   box-shadow: 0.2rem 0.8rem 1.6rem #5e35b1;
 }
-.login-container > form .login-submit {
+.login-submit, .form-submit {
     border: none;
     padding: 10px 25px;
     background: #FF8500;
@@ -104,10 +142,33 @@ body {
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-
+    width: 40%;
+    height: 40px;
+    font-size: 17px;
 }
-.login-container > form .login-submit:hover {
+.login-submit:hover, .form-submit:hover {
     box-shadow: 3px 3px 4px #5e35b1;
     -moz-box-shadow: 3px 3px 4px #5e35b1;
     -webkit-box-shadow: 3px 3px 4px #5e35b1;
+}
+.add-container > form > div:last-child, .edit-container > form > div:last-child, .add-container > form .header-title, .edit-container > form .header-title {
+    text-align: center;
+}
+.add-container > form select, .edit-container > form select {
+    width: 60%;
+    height: 40px;
+}
+.register-button-container, .button-login {
+    display: inline-block;
+}
+.button-login {
+    border: none;
+    background-color: #da9c5b;
+    color: #fff;
+    border-radius: 0.2rem;
+    height: 35px;
+    width: 80px;
+    font-size: 16px;
+    padding: 0px;
+    margin-right: 15px;
 }

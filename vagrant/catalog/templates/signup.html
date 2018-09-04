@@ -7,35 +7,39 @@
 </head>
 <body>
 <header class="header-container">
-    <nav></nav>
+    <nav>
+        <div>
+            <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
+        </div>
+    </nav>
 </header>
 
-<div>
+<div class="signup-container">
     <div><h3 class="header-title">Register User</h3></div>
     <form action="{{ url_for('userSignup') }}" method="post">
 
         <div>
-            <input type="text" name="username" placeholder="Username">
+            <input type="text" name="username" placeholder="Username" class="login-input">
         </div>
 
         <div>
-            <input type="text" name="firstname" placeholder="Firstname">
+            <input type="text" name="firstname" placeholder="Firstname" class="login-input">
         </div>
 
         <div>
-            <input type="text" name="lastname" placeholder="Lastname">
+            <input type="text" name="lastname" placeholder="Lastname" class="login-input">
         </div>
 
         <div>
-            <input type="password" name="password" placeholder="Password">
+            <input type="password" name="password" placeholder="Password" class="login-input">
         </div>
 
         <div>
-            <input type="password" name="password" placeholder="Confirm Password">
+            <input type="password" name="password" placeholder="Confirm Password" class="login-input">
         </div>
 
         <div>
-            <input type="submit" value="Register">
+            <input type="submit" value="REGISTER" class="login-submit">
         </div>
 
     </form>

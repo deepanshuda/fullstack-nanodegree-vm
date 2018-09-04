@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 <head>
     <meta charset="UTF-8">
     <title>Add Item</title>
 </head>
 <body>
 <header class="header-container">
-    <nav></nav>
+    <nav>
+        <div>
+            <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
+        </div>
+    </nav>
 </header>
 
-<div>
+<div class="add-container">
     <form action="{{ url_for('addNewItem') }}" method="post">
 
         <h3 class="header-title">Add Item</h3>
 
         <div>
-            <label>Title
-                <input type="text" name="title">
-            </label>
+            <label style="padding: 8px 60px 8px 0px;">Title</label>
+            <input type="text" name="title" class="form-input">
         </div>
 
         <div>
-            <label>Description
-                <input type="text" name="desc">
-            </label>
+            <label style="padding: 8px 10px 8px 0px;">Description</label>
+            <input type="text" name="desc" class="form-input">
         </div>
 
         <div>
-            <label>Category
-                <select name="categoryId">
-                    {% for category in categories %}
-                    <option value="{{category.id}}">{{category.title}}</option>
-                    {% endfor %}
-                </select>
-            </label>
+            <label style="padding: 8px 25px 8px 0px;">Category</label>
+            <select name="categoryId">
+                {% for category in categories %}
+                <option value="{{category.id}}">{{category.title}}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <div>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Submit" class="form-submit">
         </div>
 
 

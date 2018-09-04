@@ -8,21 +8,28 @@
 <body>
 <header class="header-container">
     <nav>
-
-
-        {% if session['logged_in'] == true %}
-            <div>
-                <button type="button" onclick="window.location.href='{{ url_for('userLogout') }}'">LOGOUT</button>
-            </div>
-        {% else %}
-            <div>
-                <button type="button" onclick="window.location.href='{{ url_for('userLogin') }}'">LOGIN</button>
+        <div>
+            <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
+        </div>
+        <div style="float: right;">
+            {% if session['logged_in'] == true %}
                 <div>
-                    <span style="color: #fff;">Not a Registered User?</span>
-                    <button type="button" onclick="window.location.href='{{ url_for('userSignup') }}'">SIGNUP</button>
+                    <button type="button" onclick="window.location.href='{{ url_for('userLogout') }}'" class="button-logout">LOGOUT</button>
                 </div>
-            </div>
-        {% endif %}
+            {% else %}
+                <div>
+                    <button type="button" onclick="window.location.href='{{ url_for('userLogin') }}'" class="button-login">LOGIN</button>
+                    <div class="register-button-container">
+                        <div>
+                            <span style="color: #fff;">Not a Registered User?</span>
+                        </div>
+                        <div>
+                            <button type="button" onclick="window.location.href='{{ url_for('userSignup') }}'">SIGNUP</button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </nav>
 </header>
 
@@ -42,7 +49,7 @@
             <h3 class="heading-title">Latest Items</h3>
 
             {% if session['logged_in'] == true %}
-                <a href="{{url_for('addNewItem')}}">Add Item</a>
+                <button type="button" onclick="window.location.href='{{ url_for('addNewItem') }}'" class="button-add-item">Add Item</button>
             {% endif %}
 
         </div>

@@ -7,12 +7,16 @@
 </head>
 <body>
 <header class="header-container">
-    <nav></nav>
+    <nav>
+        <div>
+            <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
+        </div>
+    </nav>
 </header>
 
 <div class="item-list-container">
     <div>
-        <h3 class="header-title">Categories</h3>
+        <h3 class="heading-title">Categories</h3>
 
         {% for category in categories %}
 
@@ -24,7 +28,7 @@
     <div>
 
         <div>
-            <h3 class="header-title">{{category.title}} Items ({{ items.count() }} items)</h3>
+            <h3 class="heading-title">{{category.title}} Items ({{ items.count() }} items)</h3>
         </div>
 
         {% for item in items %}

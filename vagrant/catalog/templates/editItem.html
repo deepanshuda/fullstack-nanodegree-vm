@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 <head>
     <meta charset="UTF-8">
     <title>Edit Item</title>
 </head>
 <body>
 <header class="header-container">
-    <nav></nav>
+    <nav>
+        <div>
+            <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
+        </div>
+    </nav>
 </header>
 
-<div>
+<div class="edit-container">
     <form action="{{ url_for('editItem', item_id=item.id) }}" method="post">
 
         <h3 class="header-title">Edit Item</h3>
 
         <div>
-            <label>Title
-                <input type="text" name="title" value="{{ item.title }}">
-            </label>
+            <label style="padding: 8px 60px 8px 0px;">Title</label>
+            <input type="text" name="title" value="{{ item.title }}" class="form-input">
         </div>
 
         <div>
-            <label>Description
-                <input type="text" name="desc" value="{{ item.description }}">
-            </label>
+            <label style="padding: 8px 10px 8px 0px;">Description</label>
+            <input type="text" name="desc" value="{{ item.description }}" class="form-input">
         </div>
 
         <div>
-            <label>Category
-                <select name="categoryId">
-                    {% for category in categories %}
-                    <option value="{{category.id}}">{{category.title}}</option>
-                    {% endfor %}
-                </select>
-            </label>
+            <label style="padding: 8px 25px 8px 0px;">Category</label>
+            <select name="categoryId">
+                {% for category in categories %}
+                <option value="{{category.id}}">{{category.title}}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <div>
-            <input type="submit" value="Update">
+            <input type="submit" value="Update" class="form-submit">
         </div>
 
 

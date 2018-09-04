@@ -7,16 +7,20 @@
 </head>
 <body>
 <header class="header-container">
-    <nav></nav>
+    <nav>
+        <div>
+            <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
+        </div>
+    </nav>
 </header>
 <div class="item-container">
-    <div><h3 class="heading-title">{{ item.title }}</h3></div>
+    <div><h3 class="heading-title item-heading">{{ item.title }}</h3></div>
     <div>Description: {{item.description}}</div>
 
     {% if session['logged_in'] == true %}
-        <div>
-            <a href="{{url_for('editItem', item_id=item.id)}}">Edit</a>
-            <a href="{{url_for('deleteItem', item_id=item.id)}}">Delete</a>
+        <div class="action-button">
+            <button type="button" onclick="window.location.href='{{ url_for('editItem', item_id=item.id) }}'" class="button-edit-item">Edit</button>
+            <button type="button" onclick="window.location.href='{{ url_for('deleteItem', item_id=item.id) }}'" class="button-delete-item">Delete</button>
         </div>
     {% endif %}
 </div>
