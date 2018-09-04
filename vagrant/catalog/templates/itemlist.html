@@ -12,7 +12,7 @@
 
 <div class="item-list-container">
     <div>
-        <h3>Categories</h3>
+        <h3 class="header-title">Categories</h3>
 
         {% for category in categories %}
 
@@ -22,6 +22,10 @@
         {% endfor %}
     </div>
     <div>
+
+        <div>
+            <h3 class="header-title">{{category.title}} Items ({{ items.count() }} items)</h3>
+        </div>
 
         {% for item in items %}
 

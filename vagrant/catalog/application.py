@@ -33,7 +33,7 @@ def categoryItemsList(categoryTitle):
     categories = s.query(Category).all()
     category = s.query(Category).filter_by(title = categoryTitle).one()
     items = s.query(Item).filter_by(categoryId = category.id)
-    return render_template('itemlist.html', categories = categories, items = items)
+    return render_template('itemlist.html', categories = categories, items = items, category = category)
 
 
 @app.route('/catalog/<int:category_id>/<int:item_id>', methods=['GET'])

@@ -12,14 +12,14 @@
 
         {% if session['logged_in'] == true %}
             <div>
-                <button type="button" onclick="window.location.href='{{ url_for('userLogout') }}'">Logout</button>
+                <button type="button" onclick="window.location.href='{{ url_for('userLogout') }}'">LOGOUT</button>
             </div>
         {% else %}
             <div>
-                <button type="button" onclick="window.location.href='{{ url_for('userLogin') }}'">Login</button>
+                <button type="button" onclick="window.location.href='{{ url_for('userLogin') }}'">LOGIN</button>
                 <div>
-                    <span>Not a Registered User?</span>
-                    <button type="button" onclick="window.location.href='{{ url_for('userSignup') }}'">Signup</button>
+                    <span style="color: #fff;">Not a Registered User?</span>
+                    <button type="button" onclick="window.location.href='{{ url_for('userSignup') }}'">SIGNUP</button>
                 </div>
             </div>
         {% endif %}
@@ -28,7 +28,7 @@
 
 <div class="home-container">
     <div>
-        <h3>Categories</h3>
+        <h3 class="heading-title">Categories</h3>
 
         {% for category in categories %}
 
@@ -39,7 +39,7 @@
     </div>
     <div>
         <div class="add-item-container">
-            <h3>Latest Items</h3>
+            <h3 class="heading-title">Latest Items</h3>
 
             {% if session['logged_in'] == true %}
                 <a href="{{url_for('addNewItem')}}">Add Item</a>
