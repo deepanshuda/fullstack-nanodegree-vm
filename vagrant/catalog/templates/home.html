@@ -12,7 +12,7 @@
             <button type="button" onclick="window.location.href='{{ url_for('categoriesList') }}'" class="button-home">HOME</button>
         </div>
         <div style="float: right;">
-            {% if session['logged_in'] == true %}
+            {% if session['logged_in'] == True %}
                 <div>
                     <button type="button" onclick="window.location.href='{{ url_for('userLogout') }}'" class="button-logout">LOGOUT</button>
                 </div>

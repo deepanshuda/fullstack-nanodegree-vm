@@ -10,10 +10,12 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key = True)
-    first_name = Column(String(100), nullable = False)
+    first_name = Column(String(100))
     last_name = Column(String(100))
-    username = Column(String(100), nullable = False)
-    hash_password = Column(String(250), nullable = False)
+    username = Column(String(100))
+    hash_password = Column(String(250))
+    email = Column(String(250))
+    picture = Column(String(250))
 
     @property
     def serialize(self):
@@ -22,7 +24,9 @@ class User(Base):
             'firstName': self.first_name,
             'lastName': self.last_name,
             'username': self.username,
-            'hashPassword': self.hash_password
+            'hashPassword': self.hash_password,
+            'email': self.email,
+            'picture': self.picture
         }
 
 
@@ -60,5 +64,5 @@ class Item(Base):
 
 
 
-engine = create_engine('sqlite:///itemcatalog.db')
+engine = create_engine('sqlite:///itemcatalog.db?check_same_thread=False')
 Base.metadata.create_all(engine)
