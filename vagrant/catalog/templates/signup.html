@@ -19,11 +19,11 @@
     <form action="{{ url_for('userSignup') }}" method="post">
 
         <div>
-            <input type="text" name="username" placeholder="Username" class="login-input">
+            <input type="text" name="username" placeholder="Username" class="login-input" required>
         </div>
 
         <div>
-            <input type="text" name="firstname" placeholder="Firstname" class="login-input">
+            <input type="text" name="firstname" placeholder="Firstname" class="login-input" required>
         </div>
 
         <div>
@@ -31,11 +31,11 @@
         </div>
 
         <div>
-            <input type="password" name="password" placeholder="Password" class="login-input">
+            <input type="password" name="password" placeholder="Password" class="login-input" required>
         </div>
 
         <div>
-            <input type="password" name="password" placeholder="Confirm Password" class="login-input">
+            <input type="password" name="password" placeholder="Confirm Password" class="login-input" required>
         </div>
 
         <div>

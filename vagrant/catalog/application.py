@@ -103,8 +103,9 @@ def userLogin():
         password = request.form['password']
         print("fetching")
         result = s.query(User).filter_by(username = username).first()
-        print("RESULT: ", result.first_name)
+
         if result:
+            print("RESULT: ", result.first_name)
             if check_password(result.hash_password, password):
                 session['logged_in'] = True
                 return redirect(url_for('categoriesList'))
