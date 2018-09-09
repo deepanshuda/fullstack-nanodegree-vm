@@ -55,7 +55,7 @@
     function signInCallback(authResult) {
         if(authResult['code']) {
             <!--console.log(authResult['code']);-->
-            <!--$('#signinButton').attr('style', 'display:none');-->
+            $('#signinButton').attr('style', 'display:none');
             $.ajax({
                 type: 'POST',
                 url: '/gconnect?state={{STATE}}',

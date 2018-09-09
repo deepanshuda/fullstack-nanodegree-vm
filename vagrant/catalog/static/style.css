@@ -14,7 +14,7 @@ a:visited {
 .heading-title {
     font-size: 25px;
 }
-.home-container, .item-list-container, .item-container {
+.main-controller {
     margin: 8px 200px;
     padding: 8px;
     background-color: #59bfe6;
@@ -172,4 +172,14 @@ a:visited {
     padding: 0px;
     margin-right: 15px;
     vertical-align: top;
+}
+
+.logout-controller, .delete-controller {
+    text-align: center;
+}
+.logout-controller > *, .delete-controller > * {
+    margin: 20px auto;
+}
+.logout-controller > form, .delete-controller > form {
+    width: 50%;
 }

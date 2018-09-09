@@ -14,12 +14,12 @@
     </nav>
 </header>
 
-<div>
+<div class="main-controller logout-controller">
     <h3 class="header-title">Logout</h3>
     <p>Are you sure you want to logout?</p>
     <form action="{{ url_for('userLogout')}}" method="post">
 
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" class="form-submit">
 
     </form>
 </div>
