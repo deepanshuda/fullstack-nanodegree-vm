@@ -6,7 +6,8 @@ from flask import (
     url_for,
     session,
     abort,
-    jsonify
+    jsonify,
+    g
 )
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -17,6 +18,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Response
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from flask_httpauth import HTTPBasicAuth
+
 import httplib2
 import json
 import random
@@ -30,6 +33,8 @@ s = DBSesion()
 
 app = Flask(__name__)
 
+auth = HTTPBasicAuth()
+
 GOOGLE_CLIENT_ID = json.loads(open('client_secret_json.json', 'r')
                               .read())['web']['client_id']
 APPLICATION_NAME = "ItemCatalog"
@@ -40,16 +45,41 @@ GOOGLE_DISCONNECT_URL = \
 
 
 def set_password(password):
+    """Method - Get hash password"""
+
     return generate_password_hash(password)
 
 
 def check_password(hashedPassword, password):
+    """Method - check hash password with provided one"""
+
     return check_password_hash(hashedPassword, password)
+
+
+@auth.verify_password
+def verify_pw(username, password):
+    """Method - Verify Password
+
+    This method verifies whether the provided username
+    and password are valid or not
+    """
+
+    user = s.query(User).filter_by(username=username).first()
+    if not user or not check_password(user.hash_password, password):
+        return False
+
+    g.user = user
+    return True
 
 
 @app.route('/')
 @app.route('/catalog')
 def categoriesList():
+    """Method - Categories List
+
+    This method list down all categories and items im catalog
+    """
+
     categories = s.query(Category).all()
     items = s.query(Item).all()
     return render_template('home.html',
@@ -59,6 +89,11 @@ def categoriesList():
 
 @app.route('/catalog/<string:categoryTitle>/items', methods=['GET'])
 def categoryItemsList(categoryTitle):
+    """Method - Category Items
+
+    This method shows items of selected category
+    """
+
     categories = s.query(Category).all()
     category = s.query(Category).filter_by(title=categoryTitle).one()
     items = s.query(Item).filter_by(categoryId=category.id)
@@ -70,13 +105,26 @@ def categoryItemsList(categoryTitle):
 
 @app.route('/catalog/<int:category_id>/<int:item_id>', methods=['GET'])
 def categoryItem(category_id, item_id):
+    """Method - show item
+
+    This method shows details of item selected
+    """
+
     item = s.query(Item).filter_by(id=item_id).one()
     return render_template('item.html',
                            item=item)
 
 
 @app.route('/catalog/add', methods=['GET', 'POST'])
+@auth.login_required
 def addNewItem():
+    """Method - Add new item
+
+    This method has two methods
+    GET - opens add new item page
+    POST - adds new item in database
+    """
+
     if request.method == 'POST':
         newItem = Item(title=request.form['title'],
                        description=request.form['desc'],
@@ -91,8 +139,20 @@ def addNewItem():
 
 
 @app.route('/catalog/<int:item_id>/edit', methods=['GET', 'POST'])
+@auth.login_required
 def editItem(item_id):
+    """Method - Edit item
+
+    This method has two methods
+    GET - opens edit item page
+    POST - updates item in database
+    """
+
     item = s.query(Item).filter_by(id=item_id).one()
+    user = g.user
+    if not user.id == item.userId:
+        return False
+
     if request.method == 'POST':
         item.title = request.form['title']
         item.description = request.form['desc']
@@ -110,7 +170,15 @@ def editItem(item_id):
 
 
 @app.route('/catalog/<int:item_id>/delete', methods=['GET', 'POST'])
+@auth.login_required
 def deleteItem(item_id):
+    """Method - Delete item
+
+    This method has two methods
+    GET - opens delete item page
+    POST - deletes item from database
+    """
+
     item = s.query(Item).filter_by(id=item_id).one()
     if request.method == 'POST':
         s.delete(item)
@@ -122,6 +190,14 @@ def deleteItem(item_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def userLogin():
+    """Method - user login
+
+    This method has two methods
+    GET - opens login page
+    POST - checks if user specified is available
+    If yes, then open categories home page
+    """
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -132,6 +208,7 @@ def userLogin():
             print("RESULT: ", result.first_name)
             if check_password(result.hash_password, password):
                 session['logged_in'] = True
+                g.user = result
                 return redirect(url_for('categoriesList'))
             else:
                 session['logged_in'] = False
@@ -150,6 +227,14 @@ def userLogin():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def userSignup():
+    """Method - user signup
+
+    This method has two methods
+    GET - opens login page
+    POST - checks if user specified is available
+    If yes, then open categories home page
+    """
+
     if request.method == 'POST':
         username = request.form['username']
         firstname = request.form['firstname']
@@ -169,6 +254,12 @@ def userSignup():
 
 @app.route('/logout', methods=['GET', 'POST'])
 def userLogout():
+    """Method - get user id
+
+    :parameter - username
+    :returns - userId
+    """
+
     if request.method == 'POST':
         access_token = session.get('access_token')
         if access_token is not None:
@@ -187,6 +278,12 @@ def userLogout():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """Method - Google Connect
+
+    This method helps connect with google account
+    Also fetches google data
+    """
+
     # Valid State Token
     if request.args.get('state') != session['state']:
         response = Response(json.dumps('Invalid state parameter'),
@@ -279,6 +376,11 @@ def gconnect():
 
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
+    """Method - Google Disconnect
+
+    This method helps disconnect with google account
+    """
+
     access_token = session.get('access_token')
     if access_token is None:
         print("Access token is none")
@@ -320,7 +422,15 @@ def gdisconnect():
 
 
 @app.route('/catalog/catalog.json')
-def catalogList():
+@auth.login_required
+def catalogJsonList():
+    """Method - Catalog json
+
+    End point to get whole catalog json data
+    This is authentication secured and required user login
+    before returning result
+    """
+
     categories = s.query(Category).all()
     categoriesObj = []
     for i in categories:
@@ -333,33 +443,67 @@ def catalogList():
 
 
 @app.route('/catalog/categories.json')
-def categoriesList():
+@auth.login_required
+def categoriesJsonList():
+    """Method - Categories json
+
+    End point to get categories json data
+    This is authentication secured and required user login
+    before returning result
+    """
+
     categories = s.query(Category).all()
 
     return jsonify(categories=[j.serialize for j in categories])
 
 
 @app.route('/catalog/<int:category_id>/items.json')
-def itemsList(category_id):
+@auth.login_required
+def itemsJsonList(category_id):
+    """Method - Items json
+
+    End point to get items json data of a category
+    This is authentication secured and required user login
+    before returning result
+    """
+
     items = s.query(Item).filter_by(categoryId=category_id)
 
     return jsonify(items=[j.serialize for j in items])
 
 
-def getUserId(email):
+def getUserId(username):
+    """Method - get user id
+
+    :parameter - username
+    :returns - userId
+    """
+
     try:
-        user = s.query(User).filter_by(email=email).one()
+        user = s.query(User).filter_by(username=username).one()
         return user
     except:
         return None
 
 
 def getUserInfo(user_id):
+    """Method - get user information
+
+    :parameter - user_id
+    :returns - user
+    """
+
     user = s.query(User).filter_by(id=user_id).one()
     return user
 
 
 def createUser(login_session):
+    """Method - create user
+
+    :parameter - login_session
+    :returns - user id
+    """
+
     newUser = User(username=login_session['username'],
                    email=login_session['email'],
                    picture=login_session['picture'])

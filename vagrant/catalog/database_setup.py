@@ -7,6 +7,8 @@ Base = declarative_base()
 
 
 class User(Base):
+    """Class for table User"""
+
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key = True)
@@ -31,6 +33,7 @@ class User(Base):
 
 
 class Category(Base):
+    """Class for table Category"""
     __tablename__ = 'category'
 
     id = Column(Integer, primary_key=True)
@@ -45,13 +48,16 @@ class Category(Base):
 
 
 class Item(Base):
+    """Class for table Item"""
     __tablename__ = 'item'
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     description = Column(String(250), nullable=False)
     categoryId = Column(Integer, ForeignKey('category.id'))
+    userId = Column(Integer, ForeignKey('user.id'))
     category = relationship(Category)
+    user = relationship(User)
 
     @property
     def serialize(self):
@@ -59,7 +65,8 @@ class Item(Base):
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'categoryId': self.categoryId
+            'categoryId': self.categoryId,
+            'userId': self.userId
         }
 
 
