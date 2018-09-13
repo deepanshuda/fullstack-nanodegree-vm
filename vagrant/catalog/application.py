@@ -7,7 +7,8 @@ from flask import (
     session,
     abort,
     jsonify,
-    g
+    g,
+    flash
 )
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -131,6 +132,7 @@ def addNewItem():
                        categoryId=request.form['categoryId'])
         s.add(newItem)
         s.commit()
+        flash(u'new menu item created', 'success')
         return redirect(url_for('categoriesList'))
     else:
         categories = s.query(Category).all()
@@ -149,9 +151,14 @@ def editItem(item_id):
     """
 
     item = s.query(Item).filter_by(id=item_id).one()
-    user = g.user
-    if not user.id == item.userId:
-        return False
+
+    if g.user is not None:
+        user_id = g.user.id
+        if not user_id == item.userId:
+            categories = s.query(Category).all()
+            flash(u'Selected item is not owned by you. You can create a new item and then edit it.', 'danger')
+            return render_template('addItem.html',
+                                   categories=categories)
 
     if request.method == 'POST':
         item.title = request.form['title']
@@ -159,6 +166,7 @@ def editItem(item_id):
         item.categoryId = request.form['categoryId']
         s.add(item)
         s.commit()
+        flash(u'menu item edited', 'success')
         return redirect(url_for('categoryItem',
                                 category_id=item.categoryId,
                                 item_id=item.id))
@@ -180,9 +188,19 @@ def deleteItem(item_id):
     """
 
     item = s.query(Item).filter_by(id=item_id).one()
+
+    if g.user is not None:
+        user_id = g.user.id
+        if not user_id == item.userId:
+            categories = s.query(Category).all()
+            flash(u'Selected item is not owned by you. You can create a new item and then delete it.', 'danger')
+            return render_template('addItem.html',
+                                   categories=categories)
+
     if request.method == 'POST':
         s.delete(item)
         s.commit()
+        flash(u'menu item deleted', 'success')
         return redirect(url_for('categoriesList'))
     else:
         return render_template('deleteItem.html', item=item)
@@ -212,9 +230,11 @@ def userLogin():
                 return redirect(url_for('categoriesList'))
             else:
                 session['logged_in'] = False
+                g.user = None
                 return render_template('login.html')
         else:
             session['logged_in'] = False
+            g.user = None
             return render_template('login.html')
 
     else:
@@ -247,6 +267,7 @@ def userSignup():
         s.add(user)
         s.commit()
         session['logged_in'] = True
+        g.user = user
         return redirect(url_for('categoriesList'))
     else:
         return render_template('signup.html')
@@ -271,6 +292,7 @@ def userLogout():
             return redirect(url_for('categoriesList'))
         else:
             session['logged_in'] = False
+            g.user = None
             return redirect(url_for('categoriesList'))
     else:
         return render_template('logout.html')
@@ -356,6 +378,7 @@ def gconnect():
         userId = createUser(session)
 
     session['user_id'] = userId
+    g.user = getUserInfo(userId)
 
     output = ''
     output += '<h1>Welcome, '
@@ -408,6 +431,7 @@ def gdisconnect():
         del session['email']
         del session['picture']
         session['logged_in'] = False
+        g.user = None
         response = Response(json.dumps("Successfully disconnected."),
                             status=200,
                             mimetype='application/json')

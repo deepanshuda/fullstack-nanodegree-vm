@@ -164,6 +164,9 @@ a:visited {
 .register-button-container, .button-login {
     display: inline-block;
 }
+.register-button-container > div {
+    display: inline-block;
+}
 .button-login, .button-logout {
     border: none;
     background-color: #da9c5b;
